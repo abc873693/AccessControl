@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,11 @@ import butterknife.Unbinder;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
+import okio.ByteString;
 import rainvisitor.accesscontrol.R;
+import rainvisitor.accesscontrol.api.Room;
 import rainvisitor.accesscontrol.api.RoomStatus;
 import rainvisitor.accesscontrol.libs.PinView;
 import rainvisitor.accesscontrol.libs.Utils;
@@ -156,12 +161,52 @@ public class PinFragment extends Fragment implements BlockingStep {
         unbinder.unbind();
     }
 
-    private void openDoor() {
-        Toast.makeText(getActivity(), "正在開門", Toast.LENGTH_SHORT).show();
-    }
-
     @OnClick(R.id.button_clear)
     public void onViewClicked() {
         pinView.clear();
+    }
+
+
+    private void openDoor() {
+        Toast.makeText(getActivity(), "正在開門", Toast.LENGTH_SHORT).show();
+        Room.open(new WebSocketListener() {
+            @Override
+            public void onOpen(WebSocket webSocket, Response response) {
+                super.onOpen(webSocket, response);
+                Log.e("onOpen", response.toString());
+            }
+
+            @Override
+            public void onMessage(WebSocket webSocket, String text) {
+                super.onMessage(webSocket, text);
+                Log.e("onMessage", text);
+            }
+
+            @Override
+            public void onMessage(WebSocket webSocket, ByteString bytes) {
+                super.onMessage(webSocket, bytes);
+                Log.e("onMessage", bytes.toString());
+            }
+
+            @Override
+            public void onClosing(WebSocket webSocket, int code, String reason) {
+                super.onClosing(webSocket, code, reason);
+                Log.e("onClosing", reason);
+            }
+
+            @Override
+            public void onClosed(WebSocket webSocket, int code, String reason) {
+                super.onClosed(webSocket, code, reason);
+                Log.e("onClosed", reason);
+            }
+
+            @Override
+            public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+                super.onFailure(webSocket, t, response);
+                Log.e("onFailure", webSocket.request().toString());
+                String postBody = "{\"Command\" : 15,\"Password\" : \"0000\",\"Set\" : 1}";
+                webSocket.send(postBody);
+            }
+        });
     }
 }

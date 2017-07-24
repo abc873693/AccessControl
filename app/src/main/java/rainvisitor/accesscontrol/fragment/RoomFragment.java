@@ -74,6 +74,12 @@ public class RoomFragment extends Fragment implements BlockingStep {
         KeyboardUtils.hideSoftInput(getActivity());
         textViewTitle.setText(String.format("%s %s",community.getBuildingList().get(index_building).getTitle() , getString(R.string.chose_room)));
         setRoomRecyclerView();
+        Toast.makeText(getActivity(), "正在開門", Toast.LENGTH_SHORT).show();
+        try {
+            rainvisitor.accesscontrol.api.Room.open();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
