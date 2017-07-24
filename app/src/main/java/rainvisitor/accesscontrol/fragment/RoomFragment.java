@@ -58,7 +58,6 @@ public class RoomFragment extends Fragment implements BlockingStep {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_room, container, false);
         unbinder = ButterKnife.bind(this, view);
-
         return view;
     }
 
@@ -72,14 +71,8 @@ public class RoomFragment extends Fragment implements BlockingStep {
     public void onSelected() {
         //update UI when selected
         KeyboardUtils.hideSoftInput(getActivity());
-        textViewTitle.setText(String.format("%s %s",community.getBuildingList().get(index_building).getTitle() , getString(R.string.chose_room)));
+        textViewTitle.setText(String.format("%s %s", community.getBuildingList().get(index_building).getTitle(), getString(R.string.chose_room)));
         setRoomRecyclerView();
-        Toast.makeText(getActivity(), "正在開門", Toast.LENGTH_SHORT).show();
-        try {
-            rainvisitor.accesscontrol.api.Room.open();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -90,34 +83,33 @@ public class RoomFragment extends Fragment implements BlockingStep {
     @Override
     @UiThread
     public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
-
         RoomStatus.check(
                 community.getBuildingList().get(index_building).getTitle(),
                 community.getBuildingList().get(index_building).getRoomList().get(index_room).getTitle(),
                 new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
 
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
-                getActivity().runOnUiThread(new Runnable() {
-                    String str = response.body().string();
+                    }
 
                     @Override
-                    public void run() {
-                        Check_key_response check_key_response = new Gson().fromJson(str, Check_key_response.class);
-                        //Log.i("onResponse", chat_response.toString());
-                        if (check_key_response.getMessage().equals("Error numerical password")) {
-                            callback.goToNextStep();
-                        }else {
-                            Toast.makeText(getActivity(), check_key_response.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+                    public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
+                        getActivity().runOnUiThread(new Runnable() {
+                            String str = response.body().string();
+
+                            @Override
+                            public void run() {
+                                Check_key_response check_key_response = new Gson().fromJson(str, Check_key_response.class);
+                                //Log.i("onResponse", chat_response.toString());
+                                if (check_key_response.getMessage().equals("The hotel/room is ACTIVE now")) {
+                                    callback.goToNextStep();
+                                } else {
+                                    Toast.makeText(getActivity(), check_key_response.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     }
                 });
-            }
-        });
     }
 
     @Override
@@ -159,7 +151,8 @@ public class RoomFragment extends Fragment implements BlockingStep {
         int target = -1;
         for (int i = 0; i < community.getBuildingList().get(index_building).getRoomList().size(); i++) {
             community.getBuildingList().get(index_building).getRoomList().get(i).setClicked(false);
-            if (community.getBuildingList().get(index_building).getRoomList().get(i).equals(item)) target = i;
+            if (community.getBuildingList().get(index_building).getRoomList().get(i).equals(item))
+                target = i;
         }
         community.getBuildingList().get(index_building).getRoomList().get(target).setClicked(true);
         index_room = target;

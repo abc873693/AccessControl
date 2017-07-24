@@ -21,6 +21,7 @@ public class Constants {
 
     public static final String API_URL = "https://holey.cc";
     public static final String API_ROOM_STATUS = "/phpQRCodeDemo/check-key.php";
+    public static final String API_GET_ROOM = "/phpQRCodeDemo/get-rooms.php";
     public static final String SOCKET_IP = "192.168.100.180";
 
     public static final int SOCKET_PORT = 7878;

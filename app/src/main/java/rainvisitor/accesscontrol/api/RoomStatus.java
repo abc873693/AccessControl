@@ -23,8 +23,8 @@ public class RoomStatus {
         String url = API_URL + API_ROOM_STATUS;
         final FormBody body = new FormBody.Builder()
                 .add("en_hname", building)
-                .add("en_room_no", room + " |")
-                .add("en_nkey", "1")
+                .add("en_room_no", room)
+                .add("en_nkey", "")
                 .build();
         Request request = new Request.Builder()
                 .post(body)
@@ -38,8 +38,8 @@ public class RoomStatus {
         OkHttpClient mOkHttpClient = new OkHttpClient();
         String url = API_URL + API_ROOM_STATUS;
         final FormBody body = new FormBody.Builder()
-                .add("en_hname",community.getBuildingList().get(index_building).getTitle())
-                .add("en_room_no", community.getBuildingList().get(index_building).getRoomList().get(index_room).getTitle() + " |")
+                .add("en_hname", community.getBuildingList().get(index_building).getTitle())
+                .add("en_room_no", community.getBuildingList().get(index_building).getRoomList().get(index_room).getTitle())
                 .add("en_nkey", pin)
                 .build();
         Request request = new Request.Builder()
