@@ -3,4 +3,5 @@
     <string name="chose_building">請選擇大樓</string>
     <string name="chose_room">請選擇房間</string>
     <string name="enter_PIN">請輸入PIN碼</string>
+    <string name="clear">清除</string>
 </resources>

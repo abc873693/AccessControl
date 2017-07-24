@@ -10,18 +10,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blankj.utilcode.utils.KeyboardUtils;
+import com.google.gson.Gson;
 import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 import rainvisitor.accesscontrol.R;
 import rainvisitor.accesscontrol.adapter.RoomAdapter;
+import rainvisitor.accesscontrol.api.RoomStatus;
 import rainvisitor.accesscontrol.models.Room;
+import rainvisitor.accesscontrol.models.api.Check_key_response;
 
 import static rainvisitor.accesscontrol.libs.Constants.community;
 import static rainvisitor.accesscontrol.libs.Constants.index_building;
@@ -32,6 +41,7 @@ import static rainvisitor.accesscontrol.libs.Constants.index_room;
  */
 
 public class RoomFragment extends Fragment implements BlockingStep {
+
     View view;
     @BindView(R.id.textView_title)
     TextView textViewTitle;
@@ -74,7 +84,34 @@ public class RoomFragment extends Fragment implements BlockingStep {
     @Override
     @UiThread
     public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
-        callback.goToNextStep();
+
+        RoomStatus.check(
+                community.getBuildingList().get(index_building).getTitle(),
+                community.getBuildingList().get(index_building).getRoomList().get(index_room).getTitle(),
+                new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
+                getActivity().runOnUiThread(new Runnable() {
+                    String str = response.body().string();
+
+                    @Override
+                    public void run() {
+                        Check_key_response check_key_response = new Gson().fromJson(str, Check_key_response.class);
+                        //Log.i("onResponse", chat_response.toString());
+                        if (check_key_response.getMessage().equals("Error numerical password")) {
+                            callback.goToNextStep();
+                        }else {
+                            Toast.makeText(getActivity(), check_key_response.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
