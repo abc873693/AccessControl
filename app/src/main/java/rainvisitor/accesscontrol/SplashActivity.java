@@ -14,9 +14,11 @@ import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import rainvisitor.accesscontrol.api.QRCode;
 import rainvisitor.accesscontrol.api.Room;
 import rainvisitor.accesscontrol.libs.Constants;
 import rainvisitor.accesscontrol.models.Community;
+import rainvisitor.accesscontrol.models.api.prd_response;
 
 import static rainvisitor.accesscontrol.libs.Constants.community;
 import static rainvisitor.accesscontrol.libs.Constants.index_building;
@@ -57,6 +59,30 @@ public class SplashActivity extends AppCompatActivity {
                         Log.i("onResponse", community.toString());
                         Constants.community.getBuildingList().get(index_building).setClicked(true);
                         Log.e("Community", community.toString());
+                        getQRCode();
+                    }
+                });
+            }
+        });
+    }
+
+    private void getQRCode(){
+        QRCode.get(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
+                runOnUiThread(new Runnable() {
+                    String str = response.body().string();
+
+                    @Override
+                    public void run() {
+                        prd_response prd_response = new Gson().fromJson(str, prd_response.class);
+                        Constants.keyList = prd_response.getKeyList();
+                        Log.i("onResponse", prd_response.toString());
                         openMain();
                     }
                 });
