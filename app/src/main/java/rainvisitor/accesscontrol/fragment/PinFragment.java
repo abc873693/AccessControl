@@ -28,7 +28,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import rainvisitor.accesscontrol.R;
-import rainvisitor.accesscontrol.api.Room;
+import rainvisitor.accesscontrol.api.Door;
 import rainvisitor.accesscontrol.api.RoomStatus;
 import rainvisitor.accesscontrol.libs.PinView;
 import rainvisitor.accesscontrol.libs.Utils;
@@ -165,6 +165,6 @@ public class PinFragment extends Fragment implements BlockingStep {
 
     private void openDoor() {
         Toast.makeText(getActivity(), "正在開門", Toast.LENGTH_SHORT).show();
-        Room.open();
+        Door.open();
     }
 }

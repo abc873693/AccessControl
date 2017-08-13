@@ -9,8 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.stepstone.stepper.Step;
+import com.stepstone.stepper.BlockingStep;
+import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 
 import butterknife.BindView;
@@ -25,7 +27,7 @@ import rainvisitor.accesscontrol.models.Building;
  * Created by Ray on 2017/7/15.
  */
 
-public class BuildingFragment extends Fragment implements Step {
+public class BuildingFragment extends Fragment implements BlockingStep {
 
     View view;
     @BindView(R.id.recyclerView_building)
@@ -67,6 +69,25 @@ public class BuildingFragment extends Fragment implements Step {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onNextClicked(StepperLayout.OnNextClickedCallback callback) {
+        if (Constants.community.getBuildingList().size() != 0) {
+            callback.goToNextStep();
+        }else {
+            Toast.makeText(getActivity(),"無選擇",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onCompleteClicked(StepperLayout.OnCompleteClickedCallback callback) {
+
+    }
+
+    @Override
+    public void onBackClicked(StepperLayout.OnBackClickedCallback callback) {
+
     }
 
     private void setBuildingRecyclerView() {
