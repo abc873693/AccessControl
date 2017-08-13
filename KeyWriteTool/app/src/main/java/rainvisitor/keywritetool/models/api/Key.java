@@ -1,4 +1,4 @@
-package rainvisitor.accesscontrol.models.api;
+package rainvisitor.keywritetool.models.api;
 
 import com.google.gson.annotations.SerializedName;
 

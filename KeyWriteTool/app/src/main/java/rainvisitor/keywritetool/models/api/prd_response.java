@@ -1,4 +1,4 @@
-package rainvisitor.accesscontrol.models.api;
+package rainvisitor.keywritetool.models.api;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -12,6 +12,9 @@ public class prd_response {
 
     @SerializedName("status")
     private String Status;
+
+    @SerializedName("message")
+    private String Message;
 
     @SerializedName("data")
     private List<Key> KeyList;
@@ -32,10 +35,19 @@ public class prd_response {
         KeyList = keyList;
     }
 
+    public String getMessage() {
+        return Message;
+    }
+
+    public void setMessage(String message) {
+        Message = message;
+    }
+
     @Override
     public String toString() {
         return "prd_response{" +
                 "Status='" + Status + '\'' +
+                ", Message='" + Message + '\'' +
                 ", KeyList=" + KeyList +
                 '}';
     }

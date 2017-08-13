@@ -1,4 +1,4 @@
-package rainvisitor.accesscontrol.api;
+package rainvisitor.keywritetool.api;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -6,8 +6,8 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
-import static rainvisitor.accesscontrol.libs.Constants.API_QR_CODE;
-import static rainvisitor.accesscontrol.libs.Constants.API_URL;
+import static rainvisitor.keywritetool.libs.Constants.API_QR_CODE;
+import static rainvisitor.keywritetool.libs.Constants.API_URL;
 
 /**
  * Created by Ray on 2017/7/25.
@@ -27,5 +27,4 @@ public class QRCode {
         Call call = mOkHttpClient.newCall(request);
         call.enqueue(callback);
     }
-
 }
