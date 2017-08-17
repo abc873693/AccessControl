@@ -1,5 +1,7 @@
 package rainvisitor.keywritetool.api;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -35,6 +37,11 @@ public class Room {
     }
 
     public static void setKey(final Context context) {
+        final ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("載入中");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -49,12 +56,24 @@ public class Room {
                         client.close();
                         Log.e("postBody", String.format(setKey, key.getKey(), key.getStartTime(), key.getEndTime()));
                     }
-                    Toast.makeText(context, "已送出完成", Toast.LENGTH_SHORT).show();
+                    ((Activity) context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(context, "已送出完成", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ((Activity) context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(context, "送出失敗", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                        }
+                    });
                 }
             }
         }).start();
     }
-
 }

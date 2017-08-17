@@ -164,7 +164,6 @@ public class PinFragment extends Fragment implements BlockingStep {
 
 
     private void openDoor() {
-        Toast.makeText(getActivity(), "正在開門", Toast.LENGTH_SHORT).show();
-        Door.open();
+        Door.open(getActivity());
     }
 }

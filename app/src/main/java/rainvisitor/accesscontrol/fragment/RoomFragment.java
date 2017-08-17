@@ -1,5 +1,6 @@
 package rainvisitor.accesscontrol.fragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
@@ -83,6 +84,11 @@ public class RoomFragment extends Fragment implements BlockingStep {
     @Override
     @UiThread
     public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("載入中");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         RoomStatus.check(
                 community.getBuildingList().get(index_building).getTitle(),
                 community.getBuildingList().get(index_building).getRoomList().get(index_room).getTitle(),
@@ -99,9 +105,10 @@ public class RoomFragment extends Fragment implements BlockingStep {
 
                             @Override
                             public void run() {
+                                progressDialog.dismiss();
                                 Check_key_response check_key_response = new Gson().fromJson(str, Check_key_response.class);
                                 //Log.i("onResponse", chat_response.toString());
-                                if (check_key_response.getMessage().equals("The hotel/room is ACTIVE now")) {
+                                if (check_key_response.getMessage().contains("啟用中")) {
                                     callback.goToNextStep();
                                 } else {
                                     Toast.makeText(getActivity(), check_key_response.getMessage(), Toast.LENGTH_SHORT).show();

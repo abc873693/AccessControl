@@ -1,5 +1,9 @@
 package rainvisitor.accesscontrol.api;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.widget.Toast;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -27,7 +31,12 @@ public class Door {
         call.enqueue(callback);
     }
 
-    public static void open() {
+    public static void open(final Activity activity) {
+        final ProgressDialog progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("載入中");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -35,8 +44,22 @@ public class Door {
                     SocketClient client = new SocketClient(SOCKET_IP, SOCKET_PORT);
                     client.println(postOpenDoor);
                     client.close();
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, "正在開門", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, "開門失敗", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                        }
+                    });
                 }
             }
         }).start();
