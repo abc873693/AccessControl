@@ -107,12 +107,12 @@ public class RoomFragment extends Fragment implements BlockingStep {
                             public void run() {
                                 progressDialog.dismiss();
                                 Check_key_response check_key_response = new Gson().fromJson(str, Check_key_response.class);
-                                //Log.i("onResponse", chat_response.toString());
+                                //Log.i("onResponse", check_key_response.toString());
                                 if (check_key_response.getMessage().contains("啟用中")) {
                                     callback.goToNextStep();
-                                } else if(check_key_response.getMessage().contains("enable")){
+                                } else if (check_key_response.getMessage().contains("enable")) {
                                     callback.goToNextStep();
-                                } else{
+                                } else {
                                     Toast.makeText(getActivity(), check_key_response.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
