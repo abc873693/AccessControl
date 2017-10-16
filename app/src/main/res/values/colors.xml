@@ -16,6 +16,8 @@
     <color name="item_background_active">#99FFFFFF</color>
     <color name="item_background_in_active">#96EEEFEF</color>
 
+    <color name="bottom_background">#F8EED1</color>
+
     <!-- google's material design colours from
 	http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
 

@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,6 @@ import rainvisitor.accesscontrol.R;
 import rainvisitor.accesscontrol.api.Door;
 import rainvisitor.accesscontrol.api.RoomStatus;
 import rainvisitor.accesscontrol.libs.PinView;
-import rainvisitor.accesscontrol.libs.Utils;
 import rainvisitor.accesscontrol.models.api.Check_key_response;
 
 /**
@@ -93,13 +93,14 @@ public class PinFragment extends Fragment implements BlockingStep {
         return null;
     }
 
+    @UiThread
     @Override
     public void onSelected() {
+        Log.e("Step", "onSelected");
         //update UI when selected
         Toast.makeText(getActivity(), "請輸入密碼", Toast.LENGTH_SHORT).show();
         pinView.clear();
-        KeyboardUtils.hideSoftInput(getActivity());
-        Utils.showSoftInput(getActivity(), pinView.getEditText(0));
+        //buttonClear.requestFocus();
         pinView.setPinViewEventListener(new PinView.PinViewEventListener() {
             @Override
             public void onDataEntered(PinView pinview, boolean fromUser) {
@@ -108,6 +109,14 @@ public class PinFragment extends Fragment implements BlockingStep {
                 RoomStatus.check(pinview.getValue(), callback_check_pin);
             }
         });
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                KeyboardUtils.hideSoftInput(getActivity());
+                KeyboardUtils.showSoftInput(pinView.getEditText(0));
+            }
+        },0);
     }
 
     @Override
@@ -160,10 +169,14 @@ public class PinFragment extends Fragment implements BlockingStep {
     @OnClick(R.id.button_clear)
     public void onViewClicked() {
         pinView.clear();
+        KeyboardUtils.showSoftInput(pinView.getEditText(0));
     }
-
 
     private void openDoor() {
         Door.open(getActivity());
+    }
+
+    public PinView getPinView() {
+        return pinView;
     }
 }

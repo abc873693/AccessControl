@@ -5,4 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:ms_stepperType="progress_bar"
-    android:background="@color/main_theme"/>
+    android:background="@color/main_theme"
+    app:ms_bottomNavigationBackground="@color/amber_50"
+    app:ms_backButtonText="返回"
+    app:ms_nextButtonText="下一步"
+    app:ms_completeButtonText="完成"/>

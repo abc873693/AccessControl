@@ -27,6 +27,7 @@ import butterknife.Unbinder;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import rainvisitor.accesscontrol.MainActivity;
 import rainvisitor.accesscontrol.R;
 import rainvisitor.accesscontrol.adapter.RoomAdapter;
 import rainvisitor.accesscontrol.api.RoomStatus;
@@ -144,6 +145,7 @@ public class RoomFragment extends Fragment implements BlockingStep {
             @Override
             public void onItemClick(Room item) {
                 setContextRoom(item);
+                ((MainActivity) getActivity()).getStepperLayout().setCurrentStepPosition(2);
             }
         };
         roomAdapter = new RoomAdapter(getActivity(), community.getBuildingList().get(index_building).getRoomList(), onItemClickListener);

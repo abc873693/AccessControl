@@ -18,6 +18,7 @@ import com.stepstone.stepper.VerificationError;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import rainvisitor.accesscontrol.MainActivity;
 import rainvisitor.accesscontrol.R;
 import rainvisitor.accesscontrol.adapter.BuildingAdapter;
 import rainvisitor.accesscontrol.libs.Constants;
@@ -102,6 +103,7 @@ public class BuildingFragment extends Fragment implements BlockingStep {
                 Constants.community.getBuildingList().get(target).setClicked(true);
                 Constants.index_building = target;
                 buildingAdapter.notifyDataSetChanged();
+                ((MainActivity)getActivity()).getStepperLayout().setCurrentStepPosition(1);
             }
         };
         buildingAdapter = new BuildingAdapter(getActivity(), Constants.community.getBuildingList(), onItemClickListener);
