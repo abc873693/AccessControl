@@ -110,7 +110,9 @@ public class RoomFragment extends Fragment implements BlockingStep {
                                 //Log.i("onResponse", chat_response.toString());
                                 if (check_key_response.getMessage().contains("啟用中")) {
                                     callback.goToNextStep();
-                                } else {
+                                } else if(check_key_response.getMessage().contains("enable")){
+                                    callback.goToNextStep();
+                                } else{
                                     Toast.makeText(getActivity(), check_key_response.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
